@@ -1,0 +1,26 @@
+.menu{
+    color: white;
+    font-family: "Arial", Times, serif;
+    
+}
+#center-table{
+   transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+   left: 50%;
+   top: 50%;
+   position: absolute;
+}
+
+#inicio-contenido{
+    background: url(../img/aveFondo.png) no-repeat center center fixed;
+    text-align: justify; 
+    background-color: rgba(0,0,0,0.1);
+    font-weight: bold;
+
+}
+#inicio-logoSuper{
+    background: url(../img/logoScpm.png)no-repeat center;
+}
+#inicio-logoUnl{
+    background: url(../img/logoUnl.png)no-repeat center;
+}

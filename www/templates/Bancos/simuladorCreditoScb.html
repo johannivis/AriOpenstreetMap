@@ -1,0 +1,57 @@
+<ion-view style="" class=" " id="scbSimulador" title="Simulador de Crédito">
+    <ion-content id="fondo" class="has-header" padding="true">
+
+
+        <center>
+
+            <div><label> <b>INGRESE LOS DATOS</b> </label> </div>
+        </center>
+
+        <form  name="form.simulador" class="list val" id="val-form" >
+
+            <div class="form-group">
+                <label id="val-label" for="">CRÉDITO </label>
+                <input id="val-imput" class="form-control" value="{{credito_seleccionado}}" disabled="true">
+            </div>
+            <div class="form-group">
+                <label id="val-label" for="">MONTO A SOLICITAR</label >
+                <span class="color-val" ng-show="!form.simulador.$pristine && form.simulador.monto.$error.required"> *</span>
+                <input  id="val-imput" class="form-control"  name="monto" title="Se necesita un nombre" class="ng-valid" ng-model="datos_credito.monto"placeholder="$ 0.00" type="number" max="{{monto_max}}" min="{{monto_min}}" required>
+                <span class="color-val" ng-show="!form.simulador.$pristine && form.simulador.monto.$error.min" >El valor del monto debe estar entre {{monto_min}} y {{monto_max}}.</span>
+                <span class="color-val" ng-show="!form.simulador.$pristine && form.simulador.monto.$error.max">El valor del monto debe estar entre {{monto_min}} y {{monto_max}}  .</span>
+            </div>
+            <div class="form-group">
+                <label  id="val-label" for="">PLAZO</label>
+                <span class="color-val" ng-show="!form.simulador.$pristine && form.simulador.plazo.$error.required"> *</span>
+                <input id="val-imput" class="form-control" name="plazo" ng-model="datos_credito.plazo" placeholder="Meses" type="number" max="{{plazo_max}}" min="{{plazo_min}}" required>                    
+                <span class="color-val" ng-show="!form.simulador.$pristine && form.simulador.plazo.$error.min">El valor del plazo debe estar entre {{plazo_min}} y {{plazo_max}} .</span>
+                <span class="color-val" ng-show="!form.simulador.$pristine && form.simulador.plazo.$error.max">El valor del plazo debe estar entre {{plazo_min}} y {{plazo_max}}.</span>
+            </div>
+            <div class="form-group val" >
+                <label id="val-label" for="">SISTEMA DE AMORTIZACIÓN</label>
+                <span class="color-val"ng-show="!form.simulador.$pristine && form.simulador.sistema.$error.required"> *</span>
+                <select  id="val-imput" class="form-control" name="sistema" ng-model="datos_credito.datos_sistemas" required>
+                    <option value=""  disabled="disabled" >Seleccione un sistema </option>
+                    <option>SISTENA FRANCES O CUOTA FIJA</option>
+                    <option>SISTENA ALEMAN O CAPITAL FIJO</option>
+                </select>
+
+            </div> 
+
+            </div>
+
+            <center>     
+                <button id="btn-calcular" type="submit"  class="button button-positive"  ui-sref="app.resultadoBancos" ng-click="guardarDatos(datos_credito)" ng-disabled="!form.simulador.$valid" > <span class="ion-calculator"> </span>Calcular</button>
+
+            </center>
+        </form>
+
+
+
+
+    </ion-content>
+</ion-view>
+
+
+
+

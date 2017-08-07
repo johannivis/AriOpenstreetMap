@@ -1,0 +1,37 @@
+
+<ion-view  title="Simulador de Crédito" ng-init="mapa()">
+    <ion-nav-buttons side="secondary">
+        <div>
+            <button class="button button-icon" ng-click="openPopover($event)" ><i class="ion-android-more-vertical" style="color: white"></i></button>
+        </div>
+    </ion-nav-buttons>
+    <ion-content scroll="false">           
+        <div class="bar bar-header item-input-inset"  style="background: #f0ede5;">        
+            <select id="val-imput" class="item-input-wrapper" style="background: white; height: 32px;" ng-change="seleccionarCredito(datos_bancos.idCategoria, datos_bancos.nombreCategoria)" ng-model="datos_bancos"  ng-options="valor.nombreCategoria for valor in datos_creditos" >
+                <option value=""  disabled="disabled">SELECCIONE UN CREDITO</option>
+            </select>
+            <button class="button" style="font-weight:bold; height: 32px;" id="but-buscar" ng-click="lista()">
+                <i class="glyphicon glyphicon-list" style="font-size: 17px; padding-top: 4px;"></i>
+            </button>
+        </div>
+
+        <div id="map" data-tap-disabled="true"></div>
+        <div id ="target" class="btn-banco"> <a id="btn-simulador" class=" button button-positive button-block " ng-disabled="!(datos_bancos.nombreCategoria && n != 0)"   ng-click="calcular()" ui-sref="app.simuladorBancos({ bandera:3 })">Simular Crédito</a></div>
+
+        <div style="position: absolute; right: 11px; top: 56px; z-index: 500;"> <a id="myButton" class=" btn"  ng-click="ubicar()"><i class="ion-android-pin" style="color: black; font-size: 20px;"></i></a></div>
+
+        <script id="popover.html" type="text/ng-template">
+              <ion-popover-view style="height: 230px; color:black;">
+                  <ion-content >
+                      <div class="list" ng-click="popover.hide()" >
+                      <a class="item" ui-sref="app.todosBancos({ bandera:2 })" id="popover-letra">Simulador Por Banco</a>
+                       <a class="item" ui-sref="app.simuladorPorBanco({ bancoId: 0, bancoNombre:0, bandera:2})" id="popover-letra">Simulador Por Crédito</a>
+                       <a class="item" ng-click="cambiarRango()" id="popover-letra">Cambiar Rango</a>
+                      <a class="item" ng-click="ayuda()" id="popover-letra">Ayuda</a>
+                      </div>
+                  </ion-content>
+              </ion-popover-view>
+        </script>
+
+    </ion-content>
+</ion-view>

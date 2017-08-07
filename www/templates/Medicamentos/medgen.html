@@ -1,0 +1,23 @@
+<ion-view view-title="Browse">
+  <div class="bar bar-subheader item-input-inset">
+    
+  </div>
+
+<div class="bar bar-subheader item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="search" placeholder="Ingrese nombre del medicamento" ng-model="Buscar.search">
+    </label>
+    <button class="button button-positive ion-ios-search-strong" ng-click="buscar()"></button>
+  </div>
+    
+  <ion-content class="has-subheader">
+      
+    <ion-list >
+           <ion-item href="#/app/detallemed" >
+                <p>item.NOMBRE</p>
+           </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

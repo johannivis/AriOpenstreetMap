@@ -1,0 +1,31 @@
+<ion-view style="" class="" id="scbTabla" title="Tabla de Pagos">
+        <div class="bar bar-subheader item-input-inset" style="background:black !important; color:white; ">
+                <table class="table" style=" margin-top:3% !important ; overflow-x:auto; font-size: 12px;">
+                    <tr >
+                        <th>Nº</th> 
+                        <th>Capital</th>
+                        <th>&nbsp;&nbsp;Interés</th>
+                        <th>Cuotas</th>
+                        <th>Saldo Final</th>
+                    </tr>
+                </table>
+            </div>       
+    
+    <ion-content class="has-subheader">       
+        <center>
+            <div style="overflow-x:auto; font-size: 11px;">
+                <table class=" table" id="tabla" >
+                    <tbody>
+                        <tr ng-repeat=" x in tabla" class="fila">
+                            <td ><center>&nbsp;&nbsp;{{x.i}}</center></td>
+                            <td>&nbsp;&nbsp;{{x.amortizacion}}</td>
+                            <td>{{x.interes}}</td>
+                            <td>{{x.cuota}}</td>
+                            <td>{{ x.saldofinal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </center>
+    </ion-content>
+</ion-view>

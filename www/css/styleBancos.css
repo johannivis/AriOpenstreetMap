@@ -1,0 +1,227 @@
+/*CSS de la vista mapaScb*/
+
+#map {    
+    padding-top: 15%;
+    width: 100%;
+    height: 93%;
+}
+
+#map2 {    
+    padding-top: 15%;
+    width: 100%;
+    height: 93%;
+}
+
+
+
+
+/*CSS de la vista mapaScb*/
+
+#val-imput{
+    padding-left: 4%;
+    font-size:95%;
+    border:1px solid #6285C6;
+    box-shadow: 0px 0px 30px #ffffff;
+
+}
+
+#popover-letra{
+    color:black !important;
+}
+
+#espacio{
+    padding:5px 7px 7px 5px;
+}
+
+.btn-banco{ 
+    position : absolute;
+    width: 100%;
+    bottom:-9px;
+  
+}
+
+
+#btn-simulador{
+    background: #081e47;
+    padding: 3px 5px;
+      border-radius: 0px;
+      opacity: 0.9;
+      z-index: 500;
+}
+
+
+/*CSS del simulador*/
+
+
+#fondo{
+    background:#F8F8F8;
+
+}
+
+#val-form{
+    padding-top: 1%;
+    font-size:92%;
+    padding-left: 8%;
+    padding-right: 8%;
+}
+
+
+
+#val-label{
+    padding-left: 4%;
+    padding-right: 0px;
+    color:#081e47;
+    font-size:95%;
+    font-weight: bold;
+}
+
+.div-form{
+    background: #F2F2F2 ;
+    height: 80%;
+    margin: 0 auto;
+}
+
+.color-val{
+    color:#DF0101;
+    font-size:95%;
+}
+
+#btn-calcular{
+
+    background: #081e47;
+    color: white;
+    width: 120px;
+
+}
+
+
+/* Css de la vista resultado*/
+
+#tituloR{
+    color:#081e47;
+    text-align: left;
+    font-weight: bold;
+
+}
+
+#tabla-datos{
+    color: black;
+    font-weight: bold;
+    border:1px solid white;
+    padding: 4.5px;
+
+}
+
+#tabla-borde{
+    border:1px solid white;
+    padding: 4.5px;
+    /* background:#F8F8F8;*/
+
+}
+
+#tabla-datosList{
+    color: black;
+    border-top: 1px solid #D9D9D9;
+
+    border-bottom: 1pt solid #D9D9D9;
+    padding-top: 6px;
+
+}
+
+#tabla-bordeList{
+    border:1pt solid #D9D9D9;
+    padding-top: 6px;
+    /* background:#F8F8F8;*/
+
+}
+
+#tabla-resultado{
+    background-color: black;
+    color: white;
+    padding: 7px;
+}
+
+#tabla{
+    padding:5.5px;
+}
+
+.custom-class{
+    background-color:#d9edf7;
+}
+
+.default-color{
+    background-color: red
+}
+
+#nota{
+    font-size: 12px;
+    text-align: right;
+}
+
+#letra{
+    font-size: 12px;
+}
+
+#div-calcular{
+    padding-left: 95px;
+}
+
+.my-color{
+    background-color:#081e47 !important;
+    text-align: center !important;
+    color:white !important;
+}
+
+#myButton {
+    background-color: white;
+    opacity: 0.75;
+    height: 37px;
+    width: 37px;
+    text-decoration:none;
+    padding: 4px 5px 5px 5px;
+    border: 1px solid rgb(216,216,216) ;
+    box-shadow: 1px 2px rgba(171,162,171,0.21);
+
+
+}
+
+#myButton:active {
+    position:relative;
+    background-color: #AFAFAF;
+    top:1px;
+}
+
+
+#contenido-infoB{
+    background: url(../img/aveInfoBanco.png) no-repeat center fixed;
+    text-align: justify; 
+    
+}
+
+#contenido-infoB1{
+    background: url(../img/aveInfoBanco1.png) no-repeat center fixed;
+    text-align: justify; 
+    
+}
+
+
+.fila{
+    height: 10px !important;
+
+}
+
+
+  
+.list .item.item-accordion {
+    line-height: 1px;
+
+    transition: 0.09s all linear;
+}
+.list .item.item-accordion.ng-hide {
+    line-height: 0px;
+}
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+    display: block !important;
+}
+

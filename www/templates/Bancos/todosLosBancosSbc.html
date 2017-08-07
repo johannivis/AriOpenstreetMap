@@ -1,0 +1,12 @@
+<ion-view  title="Lista de bancos"  ng-init="" >
+    <ion-content class="has-header" scroll="false">
+      <ion-list>
+            <div ng-repeat=" valor in bancos" >
+                <ion-item class="item-stable" style="color: black; font-size: 13px; font-weight:bold; ">                                    
+                    {{valor.nombreEmpresa}}
+                    <a  type="button" class="btn btn-sm" style="background: #081e47; color: white; float: right;" ui-sref="app.simuladorPorBanco({ bancoId: valor.idEmpresa, bancoNombre:valor.nombreEmpresa, bandera:1})">Simulador </a>
+                </ion-item>                
+            </div>           
+        </ion-list> 
+    </ion-content>
+</ion-view>

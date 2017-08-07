@@ -1,0 +1,52 @@
+
+<ion-view  title="Farmacia" ng-init="mapa()"> 
+    <ion-nav-buttons side="secondary">
+        <div>
+            <button class="button button-icon" ng-click="openPopover($event)" ><i class="ion-android-more-vertical" style="color: white"></i></button>
+        </div>
+    </ion-nav-buttons>
+    <ion-content scroll="false">
+        <form name="form" class="buscador">
+            <div class="bar bar-header item-input-inset" id="color-buscar">
+                 <!--<button style="background: none; border: none;" ng-click="ejecutar()"><i id="iconoMicrofono" class="icon ion-mic-a placeholder-icon"  style="color: red;"></i></button>-->
+                <label class="item-input-wrapper" style="background: white;" >    
+                    <i class="icon ion-search placeholder-icon"></i>
+                    <input id="tags" type="search" required placeholder="Ingrese nombre de la farmacia" ng-model="user.nombre" />
+                </label>                     
+                <button class="button" ng-disabled="form.$invalid" style="background: #081e47;"  ng-click="buscadorText()"> 
+                    <i class="icon ion-ios-search placeholder-icon"  style="color: white"></i>    
+                </button>
+            </div>
+        </form>
+        
+        <div style="position: absolute; right: 11px; top: 50px; z-index: 500;"> <a id="myButton" class=" btn btn-primary"  ng-click="ubicar()"><i class="ion-android-pin" style="color: black; font-size: 20px;"></i></a></div>
+        <div id="map3"></div>   
+        
+        <script id="popover.html" type="text/ng-template">
+            <ion-popover-view style="height:220px" id="menu">
+            <ion-content>
+            <div class="list" ng-click="popover.hide()" class="rangoTurno" >
+            <div><a class="item" ng-click="turnoFarmacia()" id="popover-letra">Farmacias de Turno</a></div>
+            <div><a class="item" ng-click="cargarTodasFarmacias();" id="popover-letra">Todas las Farmacias</a></div>
+            <div class="rangoTurno"><a class="item" ng-click="cambiarRango();" id="popover-letra">Cambiar Rango</a></div>
+            <div><a class="item" ng-click="ayuda()" id="popover-letra">Ayuda</a></div>
+            </div>
+            </ion-content>
+            </ion-popover-view>
+        </script>        
+
+        <script>
+            $(function () {
+                $('.buscador').show();
+            });
+        </script>
+        <script>
+            $(function () {
+                $('.rangoTurno').remove();
+            });
+        </script>
+        
+    </ion-content>
+</ion-view>
+
+

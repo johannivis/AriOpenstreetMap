@@ -1,0 +1,29 @@
+<ion-view view-title="Lista de Bancos">
+    <ion-content >
+        <ion-list>
+            <div ng-repeat="group in listaBancos" >
+                <ion-item class="item-stable"
+                          ng-click="toggleGroup(group)"
+                          ng-class="{active: isGroupShown(group)}"  style="color: black; font-size: 13px; font-weight:bold; ">
+                    <i class="icon" ng-class="isGroupShown(group) ? 'ion-arrow-down-b' : 'ion-arrow-right-b'"></i>
+                    &nbsp;                    
+                    {{group.name}}
+                    
+                </ion-item>
+                <ion-item ng-click="mostrarBanco(banco)" class="item-accordion" 
+                          ng-repeat="banco in group.items"
+                          ng-show="isGroupShown(group)">
+                    <div ui-sref="app.mapaBancos" style="color: black; font-size: 13px; font-weight:bold; padding-top:6px; padding-bottom: 15px;">
+                        {{banco.nombreSucursal}}
+                    </div>
+                    <div  ui-sref="app.mapaBancos" style="color: black; font-size: 13px; padding-bottom: 10px">
+                        <i class='icon ion-location' style='color: red; '></i> {{banco.direccion}}
+                    </div>
+                    <div  ui-sref="app.mapaBancos" style="color: black; font-size: 13px; ">
+                        <i  class='icon ion-ios-telephone' style='color: red;'></i> {{banco.telefono}}
+                    </div>
+                </ion-item>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>
