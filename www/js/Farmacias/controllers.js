@@ -13,7 +13,7 @@ angular.module('starter.controllersfarmacia', [])
             var latitud = 0; // Variable que almacena la latitud del usuario
             var longitud = 0; // Variable que almacena la longitud del usuario
             var fechaDispositivo = new Date().toJSON().slice(0, 10);//Variable que devuelve la fecha del dispositivo
-            var radio = 7;// variable del rango de busqueda. Por defecto inicia en 10
+            var radio = 5;// variable del rango de busqueda. Por defecto inicia en 10
             var datosNavigator = "";//variable que guarda la posicion de la farmacia.
             var markerUsuario = 0;// Variable del marcador del usuario
             var prev_infowindow = false;// Variable para verificar el estado(abierta o cerrada) de la ventana de informacion
@@ -26,6 +26,8 @@ angular.module('starter.controllersfarmacia', [])
             var autocompletado_nombres_farmacia = new Array();
             var marcadores = new Array();
             var datosMarcador = new Array();
+            var control = null;
+
 
             // Función que se ejecuta cuando la aplicacion ha iniciado y cargar el mapa
             $scope.mapa = function () {
@@ -40,7 +42,7 @@ angular.module('starter.controllersfarmacia', [])
                     iconAnchor: [22, 94],
                     popupAnchor: [-3, -96],
                 });
-                var market = L.marker([latitud, longitud], {icon: myIcon}).addTo(map);           
+                var market = L.marker([latitud, longitud], {icon: myIcon}).addTo(map);
                 datosMarcador[0] = market;
                 marcadores[0] = L.latLng(latitud, longitud);
             }
@@ -55,7 +57,7 @@ angular.module('starter.controllersfarmacia', [])
                     longitud = position.coords.longitude;
                     osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                             osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                            osm = L.tileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib});                            
+                            osm = L.tileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib});
                     if (map === null) {
                         map = L.map('map3').setView([latitud, longitud], 17).addLayer(osm);
                     }
@@ -63,14 +65,14 @@ angular.module('starter.controllersfarmacia', [])
                     // ELIMINA MARCADORES
                     for (var i = 0; i < datosMarcador.length; i++) {
                         map.removeLayer(datosMarcador[i]);
-                    }                                        
-                    
+                    }
+
                     datosMarcador = new Array();
                     marcadores = new Array();
                     cargaUsuario();
                     //Carga los marcadores en el mapa recibe la posicion del usuario
                     obtenerFarmacias(position.coords.latitude, position.coords.longitude);
-                    
+
                 }, function (error) {
                     $ionicLoading.hide();
                     activarGPS();
@@ -196,14 +198,42 @@ angular.module('starter.controllersfarmacia', [])
                     if (!res) {
                         for (var i = 0; i < datosMarcador.length; i++) {
                             map.removeLayer(datosMarcador[i]);
-                        }            
-                        datosRutas[0] = L.latLng(latitud,longitud);
-                        datosRutas[1] = L.latLng(latF,lonF);
-                        L.Routing.control({
+                        }
+                        var myIcon = L.icon({
+                            iconUrl: 'img/usuario.png',
+                            iconAnchor: [10, 10],
+                        });
+
+                        var IconLocal = L.icon({
+                            iconUrl: "img/marcadorFarmacia.png",
+                            iconAnchor: [10, 10],
+                        });
+                        control = null;
+
+                        datosRutas[0] = L.latLng(latitud, longitud);
+                        datosRutas[1] = L.latLng(latF, lonF);
+                        var marcodoresRuta = new Array();
+                        marcodoresRuta[0] = datosRutas[0];
+                        marcodoresRuta[1] = datosRutas[1];
+
+                        map.fitBounds(marcodoresRuta);
+                        control = L.Routing.control({
                             waypoints: [
                                 datosRutas[0],
-                                datosRutas[1]        
-                            ]
+                                datosRutas[1]
+                            ],
+                            routeWhileDragging: true,
+                            useZoomParameter: true,
+                            autoRoute: true,
+                            createMarker: function (i) {
+                                var marketAux = null;
+                                if (i === 0) {
+                                    marketAux = L.marker(datosRutas[i], {icon: myIcon});
+                                } else {
+                                    marketAux = L.marker(datosRutas[i], {icon: IconLocal});
+                                }
+                                return marketAux;
+                            }
                         }).addTo(map);
                     }
                 });
@@ -211,6 +241,7 @@ angular.module('starter.controllersfarmacia', [])
                     datosMarcador[i].closePopup();
                 }
             }
+
 
             //Función que carga la farmacia que el usuario mando a buscar
             function cargarMarcadoresPorNombre(lat, lon, nombre) {
@@ -242,6 +273,8 @@ angular.module('starter.controllersfarmacia', [])
             //Funcion que carga todos las farmacias de turno
             $scope.turnoFarmacia = function () {
                 $('#map3').css('height', '100%');
+                control.getPlan().setWaypoints([]);
+                map.removeControl(control);
                 loadMarkersPorTurno(latitud, longitud);
                 $('.rangoTurno').hide();
             };
@@ -317,6 +350,8 @@ angular.module('starter.controllersfarmacia', [])
                     if (parseInt(res) > 0 && parseInt(res) < 21) {
                         autocompletado_nombres_farmacia = [];
                         radio = parseInt(res);
+                        control.getPlan().setWaypoints([]);
+                        map.removeControl(control);
                         $scope.mapa();
                     } else {
                         $scope.popover.hide();
@@ -342,6 +377,8 @@ angular.module('starter.controllersfarmacia', [])
                 $('#map3').css('height', '93%');
                 $('.rangoTurno').show();
                 $('#menu').css('height', '220px');
+                control.getPlan().setWaypoints([]);
+                map.removeControl(control);
                 $scope.mapa();
                 autocompletado_nombres_farmacia = [];
             };
@@ -349,26 +386,16 @@ angular.module('starter.controllersfarmacia', [])
 
             // Centra la ubicacion del usuario en el mapa
             $scope.ubicar = function () {
-                
-                alert(datosRutas.length);                                
-                for (var i = 0; i < datosRutas.length; i++) {
-                    var marketRuta = L.marker([latitud, longitud]);
-                        map.removeLayer(marketRuta);
-                    } 
-                    L.Routing.control({
-                            waypoints: [
-                                datosRutas[0],
-                                datosRutas[1]        
-                            ]
-                        }).removeTo(map);
-//                map.panTo(L.latLng(latitud, longitud));
-//                map.fitBounds([marcadores[0]]);
+                map.panTo(L.latLng(latitud, longitud));
+                map.fitBounds([marcadores[0]]);
             };
 
             //Funcion que permite buscar por nombre a las farmacias
             $scope.buscadorText = function () {
                 setTimeout(function () {
                     if ($scope.user.nombre !== "") {
+                        control.getPlan().setWaypoints([]);
+                        map.removeControl(control);
                         cargarMarcadoresPorNombre(latitud, longitud, $scope.user.nombre);
                         $scope.user.nombre = "";
                     }

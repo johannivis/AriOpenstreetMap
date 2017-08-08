@@ -7,6 +7,7 @@
 }
 
 .leaflet-control-container .leaflet-routing-container-hide {
+    top: 200px;
     width: 32px;
     height: 32px;
 }
