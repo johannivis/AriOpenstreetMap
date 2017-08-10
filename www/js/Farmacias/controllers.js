@@ -85,22 +85,22 @@ angular.module('starter.controllersfarmacia', [])
             function obtenerFarmacias(lat, lon) {
                 $.getJSON(dirServHorarios + lat + "/" + lon + "/" + radio, function (records) {
                     datosTemporalesHorarios = records;
-                });
-                $.getJSON(dirServFarmacias + lat + "/" + lon + "/" + radio, function (records) {
-                    if (JSON.stringify(records.result).length === 2) {
-                        $ionicLoading.hide();
+                    $.getJSON(dirServFarmacias + lat + "/" + lon + "/" + radio, function (records) {
+                        if (JSON.stringify(records.result).length === 2) {
+                            $ionicLoading.hide();
+                            banderaCargar = false;
+                            var mensaje = 'No existe farmacias a ' + radio + ' km de su ubicación';
+                            alertaMensaje(mensaje, "Aceptar", "Mensaje");
+                        } else {
+                            datosTemporales = records.result;
+                            cargarMarcodores(records.result, "");
+                        }
+                    }).fail(function (e) {
                         banderaCargar = false;
-                        var mensaje = 'No existe farmacias a ' + radio + ' km de su ubicación';
-                        alertaMensaje(mensaje, "Aceptar", "Mensaje");
-                    } else {
-                        datosTemporales = records.result;
-                        cargarMarcodores(records.result, "img/marcadorFarmacia.png");
-                    }
-                }).fail(function (e) {
-                    banderaCargar = false;
-                    mensaje = "Lo sentimos, actualmente existen problemas con el servidor. Intente mas tarde";
-                    alertaMensaje(mensaje, "Aceptar", "Mensaje")
-                    $ionicLoading.hide();
+                        mensaje = "Lo sentimos, actualmente existen problemas con el servidor. Intente mas tarde";
+                        alertaMensaje(mensaje, "Aceptar", "Mensaje")
+                        $ionicLoading.hide();
+                    });
                 });
             }
 
@@ -110,23 +110,77 @@ angular.module('starter.controllersfarmacia', [])
             function cargarMarcodores(farmacia, datoImagen) {
                 mensaje = 'Cargando farmacias a ' + radio + ' km de su ubicación';
                 alertaCargando(mensaje);
+                var horaHorario = "";
                 for (var i = 0; i < farmacia.length; i++) {
                     autocompletado_nombres_farmacia[i] = farmacia[i].nombreSucursal;
-                    var customOptions = {
-                        'maxWidth': '500',
-                        'className': 'custom'
-                    };
-                    var myIcon = L.icon({
-                        iconUrl: datoImagen,
-                        iconAnchor: [22, 94],
-                        popupAnchor: [-3, -96],
-                    });
-                    marcadores[i + 1] = L.latLng(parseFloat(farmacia[i].latitud), parseFloat(farmacia[i].longitud));
-                    popupFarmacia = L.popup()
-                            .setLatLng(L.latLng(parseFloat(farmacia[i].latitud), parseFloat(farmacia[i].longitud)))
-                            .setContent(formatoInformacionFarmacia(farmacia[i]));
-                    var market = L.marker([parseFloat(farmacia[i].latitud), parseFloat(farmacia[i].longitud)], {icon: myIcon}).addTo(map).bindPopup(popupFarmacia, customOptions).on("popupopen", informacionVentana);
-                    datosMarcador[i + 1] = market;
+                    var contador = 0;
+                    for (var j = 0; j < datosTemporalesHorarios.result.length; j++) {
+                        var datos = datosTemporalesHorarios.result[j];
+
+                        if (datos.nombreSucursal === farmacia[i].nombreSucursal) {
+                            horaHorario = datos.horaInicioHorario.split(":")[0] + ":" + datos.horaInicioHorario.split(":")[1] + "a" + datos.horaFinHorario.split(":")[0] + ":" + datos.horaFinHorario.split(":")[1];
+                            contador++;
+                        }
+                    }
+                    if (contador > 0) {
+                        var horaSistema = new Date();
+
+                        var srcImgIcono = "img/marcadorFarmacia.png";
+
+                        var hA = horaSistema.getHours();
+                        var mA = horaSistema.getMinutes();
+
+                        var h1 = parseInt(horaHorario.split("a")[0].split(":")[0]);
+                        var m1 = parseInt(horaHorario.split("a")[0].split(":")[1]);
+
+                        var h2 = parseInt(horaHorario.split("a")[1].split(":")[0]);
+                        var m2 = parseInt(horaHorario.split("a")[1].split(":")[1]);
+
+                        if ((hA < h2 || (hA === h2 && mA < m2))&&(hA > h1 || (hA === h1 && mA > m1))){
+                            //alert(h1+":"+m1+"menor"+hA+":"+mA +"    " +h2+":"+m2 )//MENOR             
+                            //srcImgIcono ="img/marcadorFarmaciaActiva.png";
+                            srcImgIcono = "img/marcadorFarmaciaActiva.png";
+                        }else{
+                            //return "sHora1 IGUAL sHora2";
+                        }
+
+                        var customOptions = {
+                            'maxWidth': '500',
+                            'className': 'custom'
+                        };
+                        
+                        if(datoImagen!==""){
+                            srcImgIcono = datoImagen;
+                        }
+                        
+                        var myIcon = L.icon({
+                            iconUrl: srcImgIcono,
+                            iconAnchor: [22, 94],
+                            popupAnchor: [-3, -96],
+                        });
+                        marcadores[i + 1] = L.latLng(parseFloat(farmacia[i].latitud), parseFloat(farmacia[i].longitud));
+                        popupFarmacia = L.popup()
+                                .setLatLng(L.latLng(parseFloat(farmacia[i].latitud), parseFloat(farmacia[i].longitud)))
+                                .setContent(formatoInformacionFarmacia(farmacia[i]));
+                        var market = L.marker([parseFloat(farmacia[i].latitud), parseFloat(farmacia[i].longitud)], {icon: myIcon}).addTo(map).bindPopup(popupFarmacia, customOptions).on("popupopen", informacionVentana);
+                        datosMarcador[i + 1] = market;
+                    } else {
+                        var customOptions = {
+                            'maxWidth': '500',
+                            'className': 'custom'
+                        };
+                        var myIcon = L.icon({
+                            iconUrl: "img/marcadorFarmaciaSA.png",
+                            iconAnchor: [22, 94],
+                            popupAnchor: [-3, -96],
+                        });
+                        marcadores[i + 1] = L.latLng(parseFloat(farmacia[i].latitud), parseFloat(farmacia[i].longitud));
+                        popupFarmacia = L.popup()
+                                .setLatLng(L.latLng(parseFloat(farmacia[i].latitud), parseFloat(farmacia[i].longitud)))
+                                .setContent(formatoInformacionFarmacia(farmacia[i]));
+                        var market = L.marker([parseFloat(farmacia[i].latitud), parseFloat(farmacia[i].longitud)], {icon: myIcon}).addTo(map).bindPopup(popupFarmacia, customOptions).on("popupopen", informacionVentana);
+                        datosMarcador[i + 1] = market;
+                    }
                 }
                 map.fitBounds(marcadores);
                 $ionicLoading.hide();
@@ -257,7 +311,7 @@ angular.module('starter.controllersfarmacia', [])
                     var rgxp = new RegExp(nombre, "gi");
                     if (datosTemporales[i].nombreSucursal.match(rgxp) !== null) {
                         listaFarmacia.push(datosTemporales[i]);
-                        cargarMarcodores(listaFarmacia, "img/marcadorFarmacia.png");
+                        cargarMarcodores(listaFarmacia, "");
                     }
                 }
 
@@ -273,8 +327,10 @@ angular.module('starter.controllersfarmacia', [])
             //Funcion que carga todos las farmacias de turno
             $scope.turnoFarmacia = function () {
                 $('#map3').css('height', '100%');
-                control.getPlan().setWaypoints([]);
-                map.removeControl(control);
+                if (control !== null) {
+                    control.getPlan().setWaypoints([]);
+                    map.removeControl(control);
+                }
                 loadMarkersPorTurno(latitud, longitud);
                 $('.rangoTurno').hide();
             };
@@ -350,8 +406,10 @@ angular.module('starter.controllersfarmacia', [])
                     if (parseInt(res) > 0 && parseInt(res) < 21) {
                         autocompletado_nombres_farmacia = [];
                         radio = parseInt(res);
-                        control.getPlan().setWaypoints([]);
-                        map.removeControl(control);
+                        if (control !== null) {
+                            control.getPlan().setWaypoints([]);
+                            map.removeControl(control);
+                        }
                         $scope.mapa();
                     } else {
                         $scope.popover.hide();
@@ -377,8 +435,10 @@ angular.module('starter.controllersfarmacia', [])
                 $('#map3').css('height', '93%');
                 $('.rangoTurno').show();
                 $('#menu').css('height', '220px');
-                control.getPlan().setWaypoints([]);
-                map.removeControl(control);
+                if (control !== null) {
+                    control.getPlan().setWaypoints([]);
+                    map.removeControl(control);
+                }
                 $scope.mapa();
                 autocompletado_nombres_farmacia = [];
             };
@@ -394,8 +454,10 @@ angular.module('starter.controllersfarmacia', [])
             $scope.buscadorText = function () {
                 setTimeout(function () {
                     if ($scope.user.nombre !== "") {
-                        control.getPlan().setWaypoints([]);
-                        map.removeControl(control);
+                        if (control !== null) {
+                            control.getPlan().setWaypoints([]);
+                            map.removeControl(control);
+                        }
                         cargarMarcadoresPorNombre(latitud, longitud, $scope.user.nombre);
                         $scope.user.nombre = "";
                     }
@@ -406,6 +468,10 @@ angular.module('starter.controllersfarmacia', [])
                 source: autocompletado_nombres_farmacia,
                 select: function (event, ui) {
                     setTimeout(function () {
+                        if (control !== null) {
+                            control.getPlan().setWaypoints([]);
+                            map.removeControl(control);
+                        }
                         cargarMarcadoresPorNombre(latitud, longitud, ui.item.value);
                         $scope.user.nombre = "";
                     }, 500, "JavaScript");
